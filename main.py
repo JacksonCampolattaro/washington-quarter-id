@@ -11,16 +11,26 @@ if __name__ == '__main__':
     # Convert the image to grayscale
     grayscale = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
+    # Smooth the image
+    blur = cv2.blur(grayscale, (7, 7))
+    cv2.imwrite("blur.jpg", blur)
+
     # Apply a threshold (binarize the image)
-    ret, binary = cv2.threshold(grayscale, 60, 255, cv2.THRESH_BINARY)
-    # grayscale = cv2.adaptiveThreshold(grayscale, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY, 11, 2)
+    ret, binary = cv2.threshold(blur, 60, 255, cv2.THRESH_BINARY)
     cv2.imwrite("binary.jpg", binary)
 
     # Create an output image we can draw on
     output = image.copy()
 
     # Find the circles in the image
-    circles = cv2.HoughCircles(binary, cv2.HOUGH_GRADIENT, 2, binary.shape[0] / 4)
+    coinRadius = 300
+    circles = cv2.HoughCircles(binary, cv2.HOUGH_GRADIENT, 2,
+                               coinRadius * 2,
+                               # param1=100,
+                               # param2=0.8,
+                               # minRadius=coinRadius - 100,
+                               # maxRadius=coinRadius + 500,
+                               )
 
     # Notify the user if we couldn't find any circles
     if circles is None:
