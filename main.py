@@ -34,6 +34,11 @@ def circle_bbox(circle):
     return x - r, y - r, x + r, y + r
 
 
+def cut_image(image, box):
+    x1, y1, x2, y2 = box
+    return image[y1:y2, x1:x2]
+
+
 if __name__ == '__main__':
 
     # Load an image
@@ -50,9 +55,11 @@ if __name__ == '__main__':
         # Draw a circle which outlines that one
         cv2.circle(output, (x, y), r, (0, 255, 0), 2)
 
-    x1, y1, x2, y2 = circle_bbox(circles_found[0])
-    subimage = output[y1:y2, x1:x2]
-    cv2.imshow("sub", subimage)
+    boxes = [circle_bbox(circle) for circle in circles_found]
+    for index, box in enumerate(boxes):
+        sub = cut_image(output, box)
+        cv2.imshow("{}".format(index), sub)
+
     cv2.waitKey(0)
 
     # Display the image and wait for the user to view it
