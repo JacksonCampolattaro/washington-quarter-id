@@ -9,30 +9,24 @@ def find_circles(image):
 
     # Smooth the image
     blur = cv2.blur(grayscale, (7, 7))
-    cv2.imwrite("blur.jpg", blur)
 
     # Apply a threshold (binarize the image)
     ret, binary = cv2.threshold(blur, 60, 255, cv2.THRESH_BINARY)
-    cv2.imwrite("binary.jpg", binary)
 
-    # Find the circles in the image
+    # Find the edges in that binarized image
+    edges = cv2.Sobel(binary, cv2.CV_8UC1, 1, 1)
+    cv2.imwrite("edges.jpg", edges)
+
+    # Find the circles based on their edges
     coin_radius = 300
-    circles = cv2.HoughCircles(binary, cv2.HOUGH_GRADIENT, 2,
-                               coin_radius * 2,
-                               # param1=100,
-                               # param2=0.8,
-                               # minRadius=coinRadius - 100,
-                               # maxRadius=coinRadius + 500,
-                               )
+    circles = cv2.HoughCircles(edges, cv2.HOUGH_GRADIENT, 2, coin_radius * 2)
 
     # Notify the user if we couldn't find any circles
     if circles is None:
         raise Exception("Couldn't find any circles!")
 
-    # Convert circle data to integers
-    circles = np.round(circles[0, :]).astype("int")
-
-    return circles
+    # Return the circle locations, converted to integers
+    return np.round(circles[0, :]).astype("int")
 
 
 if __name__ == '__main__':
