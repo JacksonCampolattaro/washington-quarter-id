@@ -13,13 +13,13 @@ def find_circles(image):
     # Apply a threshold (binarize the image)
     ret, binary = cv2.threshold(blur, 60, 255, cv2.THRESH_BINARY)
 
-    # Find the edges in that binarized image
-    edges = cv2.Sobel(binary, cv2.CV_8UC1, 1, 1)
-    cv2.imwrite("edges.jpg", edges)
+    # # Find the edges in that binarized image
+    # edges = cv2.Sobel(binary, cv2.CV_8UC1, 1, 1)
+    # cv2.imwrite("edges.jpg", edges)
 
     # Find the circles based on their edges
     coin_radius = 300
-    circles = cv2.HoughCircles(edges, cv2.HOUGH_GRADIENT, 2, coin_radius * 2)
+    circles = cv2.HoughCircles(binary, cv2.HOUGH_GRADIENT, 2, coin_radius * 2)
 
     # Notify the user if we couldn't find any circles
     if circles is None:
