@@ -48,6 +48,7 @@ if __name__ == '__main__':
     # Create an output image we can draw on
     output = image.copy()
 
+    # Search for circular elements in the image
     circles_found = find_circles(image)
 
     # Iterate over each of the circles found
@@ -55,10 +56,11 @@ if __name__ == '__main__':
         # Draw a circle which outlines that one
         cv2.circle(output, (x, y), r, (0, 255, 0), 2)
 
+    # Display each sub-image sliced using the circle's bounding box
     boxes = [circle_bbox(circle) for circle in circles_found]
     for index, box in enumerate(boxes):
         sub = cut_image(output, box)
-        cv2.imshow("{}".format(index), sub)
+        cv2.imshow("Coin {}".format(index), sub)
 
     cv2.waitKey(0)
 
