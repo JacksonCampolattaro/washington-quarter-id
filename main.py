@@ -29,6 +29,11 @@ def find_circles(image):
     return np.round(circles[0, :]).astype("int")
 
 
+def circle_bbox(circle):
+    x, y, r = circle
+    return x - r, y - r, x + r, y + r
+
+
 if __name__ == '__main__':
 
     # Load an image
@@ -45,10 +50,15 @@ if __name__ == '__main__':
         # Draw a circle which outlines that one
         cv2.circle(output, (x, y), r, (0, 255, 0), 2)
 
+    x1, y1, x2, y2 = circle_bbox(circles_found[0])
+    subimage = output[y1:y2, x1:x2]
+    cv2.imshow("sub", subimage)
+    cv2.waitKey(0)
+
     # Display the image and wait for the user to view it
     # cv2.imshow("output", output)
     # cv2.waitKey(0)
 
-    # Save the image to a file named with the current date and time
-    filename = "results/{:%Y%m%d_%H%M%S}.jpg".format(datetime.now())
-    cv2.imwrite(filename, output)
+    # # Save the image to a file named with the current date and time
+    # filename = "results/{:%Y%m%d_%H%M%S}.jpg".format(datetime.now())
+    # cv2.imwrite(filename, output)
