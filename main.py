@@ -47,7 +47,7 @@ def cut_image(image, box):
 def main():
     # Load an image
     image = cv2.imread("data/test.jpg")
-    print('Loaded image of size {}x{}'.format(image.shape[0], image.shape[1]))
+    print(f"Loaded image of size {image.shape[0]}x{image.shape[1]}")
 
     # Search for circular elements in the image
     circles_found = find_circles(image=image, pix_radius=320)
@@ -63,7 +63,7 @@ def main():
     # Display each sub-image sliced using the circle's bounding box
     sub_images = [cut_image(output, circle_bbox(circle)) for circle in circles_found]
     for index, sub_image in enumerate(sub_images):
-        cv2.imshow("Coin {}".format(index), sub_image)
+        cv2.imshow(f"Coin {index}", sub_image)
 
     cv2.waitKey(0)
 
