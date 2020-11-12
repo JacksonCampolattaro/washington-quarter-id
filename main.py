@@ -3,28 +3,27 @@ import numpy as np
 import cv2
 
 
-def find_circles(image):
+def find_circles(image, pix_radius):
     # Convert the image to grayscale
     grayscale = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
     # Smooth the image
     blur = cv2.GaussianBlur(
         src=grayscale,
-        ksize=(7, 7),
+        ksize=(5, 5),
         sigmaX=0
     )
 
     # Find the circles based on their edges
-    coin_radius = 320
     circles = cv2.HoughCircles(
         image=blur,
         method=cv2.HOUGH_GRADIENT,
         dp=2,
-        minDist=coin_radius * 2,
+        minDist=pix_radius * 2,
         param1=100,
         param2=100,
-        minRadius=coin_radius - 10,
-        maxRadius=coin_radius + 20
+        minRadius=pix_radius - 10,
+        maxRadius=pix_radius + 20
     )
 
     # Notify the user if we couldn't find any circles
@@ -55,7 +54,7 @@ if __name__ == '__main__':
     output = image.copy()
 
     # Search for circular elements in the image
-    circles_found = find_circles(image)
+    circles_found = find_circles(image=image, pix_radius=320)
 
     # Iterate over each of the circles found
     for (x, y, r) in circles_found:
