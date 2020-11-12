@@ -11,8 +11,17 @@ def find_circles(image):
     blur = cv2.blur(grayscale, (7, 7))
 
     # Find the circles based on their edges
-    coin_radius = 300
-    circles = cv2.HoughCircles(blur, cv2.HOUGH_GRADIENT, 2, coin_radius * 2)
+    coin_radius = 320
+    circles = cv2.HoughCircles(
+        image=blur,
+        method=cv2.HOUGH_GRADIENT,
+        dp=2,
+        minDist=coin_radius * 2,
+        param1=100,
+        param2=100,
+        minRadius=coin_radius - 10,
+        maxRadius=coin_radius + 20
+    )
 
     # Notify the user if we couldn't find any circles
     if circles is None:
