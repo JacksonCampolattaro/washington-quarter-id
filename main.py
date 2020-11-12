@@ -8,7 +8,11 @@ def find_circles(image):
     grayscale = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
     # Smooth the image
-    blur = cv2.blur(grayscale, (7, 7))
+    blur = cv2.GaussianBlur(
+        src=grayscale,
+        ksize=(7, 7),
+        sigmaX=0
+    )
 
     # Find the circles based on their edges
     coin_radius = 320
