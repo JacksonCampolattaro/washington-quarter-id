@@ -44,17 +44,16 @@ def cut_image(image, box):
     return image[y1:y2, x1:x2]
 
 
-if __name__ == '__main__':
-
+def main():
     # Load an image
     image = cv2.imread("data/test.jpg")
     print('Loaded image of size {}x{}'.format(image.shape[0], image.shape[1]))
 
-    # Create an output image we can draw on
-    output = image.copy()
-
     # Search for circular elements in the image
     circles_found = find_circles(image=image, pix_radius=320)
+
+    # Create an output image we can draw on
+    output = image.copy()
 
     # Iterate over each of the circles found
     for (x, y, r) in circles_found:
@@ -62,18 +61,20 @@ if __name__ == '__main__':
         cv2.circle(output, (x, y), r, (0, 255, 0), 2)
 
     # Display each sub-image sliced using the circle's bounding box
-    # boxes = [circle_bbox(circle) for circle in circles_found]
-    # for index, box in enumerate(boxes):
-    #     print("{} {} {} {}".format(*box))
-    #     sub = cut_image(output, box)
-    #     cv2.imshow("Coin {}".format(index), sub)
-    #
-    # cv2.waitKey(0)
+    sub_images = [cut_image(output, circle_bbox(circle)) for circle in circles_found]
+    for index, sub_image in enumerate(sub_images):
+        cv2.imshow("Coin {}".format(index), sub_image)
+
+    cv2.waitKey(0)
 
     # Display the image and wait for the user to view it
     # cv2.imshow("output", output)
     # cv2.waitKey(0)
 
     # # Save the image to a file named with the current date and time
-    filename = "results/{:%Y%m%d_%H%M%S}.jpg".format(datetime.now())
-    cv2.imwrite(filename, output)
+    # filename = "results/{:%Y%m%d_%H%M%S}.jpg".format(datetime.now())
+    # cv2.imwrite(filename, output)
+
+
+if __name__ == '__main__':
+    main()
