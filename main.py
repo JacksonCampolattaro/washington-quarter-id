@@ -1,6 +1,12 @@
+import sys
+import logging
 from datetime import datetime
 import numpy as np
 import cv2
+
+import image_logging
+
+logger = logging.getLogger(__name__)
 
 
 def find_circles(image, pix_radius):
@@ -45,9 +51,14 @@ def cut_image(image, box):
 
 
 def main():
+    # Set up logging
+    logging.basicConfig(filename="quarter_id.log", filemode='w', level=logging.DEBUG)
+    logger.addHandler(logging.StreamHandler(sys.stdout))
+    logger.debug("test")
+
     # Load an image
     image = cv2.imread("data/test.jpg")
-    print(f"Loaded image of size {image.shape[0]}x{image.shape[1]}")
+    logger.info(f"Loaded image of size {image.shape[0]}x{image.shape[1]}")
 
     # Search for circular elements in the image
     circles_found = find_circles(image=image, pix_radius=320)
@@ -61,19 +72,20 @@ def main():
         cv2.circle(output, (x, y), r, (0, 255, 0), 2)
 
     # Display each sub-image sliced using the circle's bounding box
-    sub_images = [cut_image(output, circle_bbox(circle)) for circle in circles_found]
-    for index, sub_image in enumerate(sub_images):
-        cv2.imshow(f"Coin {index}", sub_image)
-
-    cv2.waitKey(0)
+    # sub_images = [cut_image(output, circle_bbox(circle)) for circle in circles_found]
+    # for index, sub_image in enumerate(sub_images):
+    #     cv2.imshow(f"Coin {index}", sub_image)
+    #
+    # cv2.waitKey(0)
 
     # Display the image and wait for the user to view it
     # cv2.imshow("output", output)
     # cv2.waitKey(0)
 
     # # Save the image to a file named with the current date and time
-    # filename = "results/{:%Y%m%d_%H%M%S}.jpg".format(datetime.now())
-    # cv2.imwrite(filename, output)
+    filename = "results/{:%Y%m%d_%H%M%S}.jpg".format(datetime.now())
+    logger.debug_image(output, filename)
+    cv2.imwrite(filename, output)
 
 
 if __name__ == '__main__':
