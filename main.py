@@ -1,3 +1,4 @@
+import os
 import sys
 import logging
 from datetime import datetime
@@ -52,9 +53,10 @@ def cut_image(image, box):
 
 def main():
     # Set up logging
-    logging.basicConfig(filename="quarter_id.log", filemode='w', level=logging.DEBUG)
-    logger.addHandler(logging.StreamHandler(sys.stdout))
-    logger.debug("test")
+    dirname = "results/{:%Y%m%d_%H%M%S}/".format(datetime.now())
+    os.mkdir(dirname)
+    logging.basicConfig(filename=dirname + "log.log", filemode='w', level=logging.DEBUG)
+    logging.getLogger().addHandler(logging.StreamHandler(sys.stdout))
 
     # Load an image
     image = cv2.imread("data/test.jpg")
@@ -83,9 +85,7 @@ def main():
     # cv2.waitKey(0)
 
     # # Save the image to a file named with the current date and time
-    filename = "results/{:%Y%m%d_%H%M%S}.jpg".format(datetime.now())
-    logger.debug_image(output, filename)
-    cv2.imwrite(filename, output)
+    image_logging.info(output, "test")
 
 
 if __name__ == '__main__':
