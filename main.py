@@ -47,11 +47,11 @@ def circle_bbox(circle):
     return x - r, y - r, x + r, y + r
 
 
-def hole_punch_image(image, circles):
+def hole_punch_crop(image, circle):
     # From: https://stackoverflow.com/questions/31519197/python-opencv-how-to-crop-circle/47629313
+    (x, y, r) = circle
     mask = np.zeros(image.shape, dtype=np.uint8)
-    for (x, y, r) in circles:
-        cv2.circle(mask, (x, y), r, (255, 255, 255), thickness=-1)
+    cv2.circle(mask, (x, y), r, (255, 255, 255), thickness=-1)
     return cv2.bitwise_and(image, mask)
 
 
@@ -82,8 +82,7 @@ def main():
     circles_found = find_circles(image=image, pix_radius=305)
 
     # Create an output image we can draw on
-    output = hole_punch_image(image, circles=circles_found)
-    image_logging.debug(output, "masked")
+    output = image.copy()
 
     # Iterate over each of the circles found
     # for (x, y, r) in circles_found:
@@ -92,7 +91,7 @@ def main():
     # image_logging.info(output, "test")
 
     # Display each sub-image sliced using the circle's bounding box
-    sub_images = [cut_image(output, circle_bbox(circle)) for circle in circles_found]
+    sub_images = [cut_image(hole_punch_crop(output, circle), circle_bbox(circle)) for circle in circles_found]
     for index, sub_image in enumerate(sub_images):
         image_logging.info(sub_image, f"coin_{index}")
         # cv2.imshow(f"Coin {index}", sub_image)
