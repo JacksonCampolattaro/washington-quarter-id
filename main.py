@@ -66,7 +66,7 @@ def main():
     logging.getLogger().addHandler(logging.StreamHandler(sys.stdout))
 
     # Load an image
-    image = cv2.imread("data/test.jpg")
+    image = cv2.imread("data/sample.bmp")
     logger.info(f"Loaded image of size {image.shape[0]}x{image.shape[1]}")
 
     # Search for circular elements in the image
