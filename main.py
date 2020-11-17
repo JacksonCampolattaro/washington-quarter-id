@@ -20,6 +20,7 @@ def find_circles(image, pix_radius):
         ksize=(5, 5),
         sigmaX=0
     )
+    image_logging.debug(blur, "blur")
 
     # Find the circles based on their edges
     circles = cv2.HoughCircles(
@@ -30,7 +31,7 @@ def find_circles(image, pix_radius):
         param1=100,
         param2=100,
         minRadius=pix_radius - 20,
-        maxRadius=pix_radius + 20
+        maxRadius=pix_radius + 10
     )
 
     # Notify the user if we couldn't find any circles
@@ -44,6 +45,14 @@ def find_circles(image, pix_radius):
 def circle_bbox(circle):
     x, y, r = circle
     return x - r, y - r, x + r, y + r
+
+
+def hole_punch_image(image, circles):
+    # From: https://stackoverflow.com/questions/31519197/python-opencv-how-to-crop-circle/47629313
+    mask = np.zeros(image.shape, dtype=np.uint8)
+    for (x, y, r) in circles:
+        cv2.circle(mask, (x, y), r, (255, 255, 255), thickness=-1)
+    return cv2.bitwise_and(image, mask)
 
 
 def cut_image(image, box):
@@ -70,29 +79,29 @@ def main():
     logger.info(f"Loaded image of size {image.shape[0]}x{image.shape[1]}")
 
     # Search for circular elements in the image
-    circles_found = find_circles(image=image, pix_radius=320)
+    circles_found = find_circles(image=image, pix_radius=305)
 
     # Create an output image we can draw on
-    output = image.copy()
+    output = hole_punch_image(image, circles=circles_found)
+    image_logging.debug(output, "masked")
 
     # Iterate over each of the circles found
-    for (x, y, r) in circles_found:
-        # Draw a circle which outlines that one
-        cv2.circle(output, (x, y), r, (0, 255, 0), 4)
+    # for (x, y, r) in circles_found:
+    #     # Draw a circle which outlines that one
+    #     cv2.circle(output, (x, y), r, (0, 255, 0), 4)
+    # image_logging.info(output, "test")
 
     # Display each sub-image sliced using the circle's bounding box
-    # sub_images = [cut_image(output, circle_bbox(circle)) for circle in circles_found]
-    # for index, sub_image in enumerate(sub_images):
-    #     cv2.imshow(f"Coin {index}", sub_image)
+    sub_images = [cut_image(output, circle_bbox(circle)) for circle in circles_found]
+    for index, sub_image in enumerate(sub_images):
+        image_logging.info(sub_image, f"coin_{index}")
+        # cv2.imshow(f"Coin {index}", sub_image)
     #
     # cv2.waitKey(0)
 
     # Display the image and wait for the user to view it
     # cv2.imshow("output", output)
     # cv2.waitKey(0)
-
-    # # Save the image to a file named with the current date and time
-    image_logging.info(output, "test")
 
 
 if __name__ == '__main__':
