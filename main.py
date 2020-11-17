@@ -47,7 +47,7 @@ def circle_bbox(circle):
     return x - r, y - r, x + r, y + r
 
 
-def hole_punch_crop(image, circle):
+def hole_punch_mask(image, circle):
     # From: https://stackoverflow.com/questions/31519197/python-opencv-how-to-crop-circle/47629313
     (x, y, r) = circle
     mask = np.zeros(image.shape, dtype=np.uint8)
@@ -91,12 +91,12 @@ def main():
     # image_logging.info(output, "test")
 
     # Display each sub-image sliced using the circle's bounding box
-    sub_images = [cut_image(hole_punch_crop(output, circle), circle_bbox(circle)) for circle in circles_found]
-    for index, sub_image in enumerate(sub_images):
-        image_logging.info(sub_image, f"coin_{index}")
+    for index, circle in enumerate(circles_found):
+        masked_image = hole_punch_mask(image, circle)
+        cropped_image = cut_image(masked_image, circle_bbox(circle))
+        image_logging.info(cropped_image, f"coin_{index}")
         # cv2.imshow(f"Coin {index}", sub_image)
-    #
-    # cv2.waitKey(0)
+        # cv2.waitKey(0)
 
     # Display the image and wait for the user to view it
     # cv2.imshow("output", output)
