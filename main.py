@@ -29,7 +29,7 @@ def find_circles(image, pix_radius):
         minDist=pix_radius * 2,
         param1=100,
         param2=100,
-        minRadius=pix_radius - 10,
+        minRadius=pix_radius - 20,
         maxRadius=pix_radius + 20
     )
 
@@ -49,6 +49,13 @@ def circle_bbox(circle):
 def cut_image(image, box):
     x1, y1, x2, y2 = box
     return image[y1:y2, x1:x2]
+
+
+def rotate_image(image, degrees):
+    # From: https://stackoverflow.com/questions/9041681/opencv-python-rotate-image-by-x-degrees-around-specific-point
+    image_center = tuple(np.array(image.shape[1::-1]) / 2)
+    rot_mat = cv2.getRotationMatrix2D(image_center, degrees, 1.0)
+    return cv2.warpAffine(image, rot_mat, image.shape[1::-1], flags=cv2.INTER_LINEAR)
 
 
 def main():
@@ -71,7 +78,7 @@ def main():
     # Iterate over each of the circles found
     for (x, y, r) in circles_found:
         # Draw a circle which outlines that one
-        cv2.circle(output, (x, y), r, (0, 255, 0), 2)
+        cv2.circle(output, (x, y), r, (0, 255, 0), 4)
 
     # Display each sub-image sliced using the circle's bounding box
     # sub_images = [cut_image(output, circle_bbox(circle)) for circle in circles_found]
