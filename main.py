@@ -30,8 +30,8 @@ def find_circles(image, pix_radius):
         minDist=pix_radius * 2,
         param1=100,
         param2=100,
-        minRadius=pix_radius - 20,
-        maxRadius=pix_radius + 10
+        minRadius=pix_radius - 15,
+        maxRadius=pix_radius + 15
     )
 
     # Notify the user if we couldn't find any circles
@@ -81,26 +81,21 @@ def main():
     # Search for circular elements in the image
     circles_found = find_circles(image=image, pix_radius=305)
 
-    # Create an output image we can draw on
-    output = image.copy()
-
-    # Iterate over each of the circles found
-    # for (x, y, r) in circles_found:
-    #     # Draw a circle which outlines that one
-    #     cv2.circle(output, (x, y), r, (0, 255, 0), 4)
-    # image_logging.info(output, "test")
-
     # Display each sub-image sliced using the circle's bounding box
     for index, circle in enumerate(circles_found):
+        (x, y, r) = circle
+        logger.info(f"Found circle at {x}, {y} with radius {r}")
         masked_image = hole_punch_mask(image, circle)
         cropped_image = cut_image(masked_image, circle_bbox(circle))
-        image_logging.info(cropped_image, f"coin_{index}")
+        image_logging.info(cropped_image, f"coin_{index}_({x},{y})")
         # cv2.imshow(f"Coin {index}", sub_image)
         # cv2.waitKey(0)
 
-    # Display the image and wait for the user to view it
-    # cv2.imshow("output", output)
-    # cv2.waitKey(0)
+    # Annotate the original image, for debugging
+    for (x, y, r) in circles_found:
+        # Draw a circle which outlines that one
+        cv2.circle(image, (x, y), r, (0, 255, 0), 4)
+    image_logging.info(image, "annotated")
 
 
 if __name__ == '__main__':
