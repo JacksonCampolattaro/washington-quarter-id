@@ -23,15 +23,16 @@ def find_circles(image, pix_radius):
     image_logging.debug(blur, "blur")
 
     # Find the circles based on their edges
+    tolerance = 8
     circles = cv2.HoughCircles(
         image=blur,
         method=cv2.HOUGH_GRADIENT,
         dp=2,
-        minDist=pix_radius * 2,
+        minDist=(pix_radius * 2) - (tolerance * 2),
         param1=100,
         param2=100,
-        minRadius=pix_radius - 15,
-        maxRadius=pix_radius + 15
+        minRadius=pix_radius - tolerance,
+        maxRadius=pix_radius + tolerance
     )
 
     # Notify the user if we couldn't find any circles
@@ -79,7 +80,7 @@ def main():
     logger.info(f"Loaded image of size {image.shape[0]}x{image.shape[1]}")
 
     # Search for circular elements in the image
-    circles_found = find_circles(image=image, pix_radius=305)
+    circles_found = find_circles(image=image, pix_radius=310)
 
     # Display each sub-image sliced using the circle's bounding box
     for index, circle in enumerate(circles_found):

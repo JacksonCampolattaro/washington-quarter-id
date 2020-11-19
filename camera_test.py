@@ -10,9 +10,6 @@ def main():
     # Print the device name
     print(f"Connected to device \"{camera.GetDeviceInfo().GetModelName()}\"")
 
-    # Choose the right camera settings
-    camera.AutoFunctionROIUseBrightness.SetValue(True)
-
     # Tell the camera to start taking pictures
     camera.StartGrabbingMax(1)
     while camera.IsGrabbing():
