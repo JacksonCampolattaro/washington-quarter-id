@@ -28,7 +28,7 @@ def find_circles(image, pix_radius):
         image=blur,
         method=cv2.HOUGH_GRADIENT,
         dp=2,
-        minDist=(pix_radius * 2) - (tolerance * 2),
+        minDist=(pix_radius * 2) - (tolerance * 4),
         param1=100,
         param2=100,
         minRadius=pix_radius - tolerance,
@@ -80,12 +80,12 @@ def main():
     logger.info(f"Loaded image of size {image.shape[0]}x{image.shape[1]}")
 
     # Search for circular elements in the image
-    circles_found = find_circles(image=image, pix_radius=310)
+    circles_found = find_circles(image=image, pix_radius=314)
 
     # Display each sub-image sliced using the circle's bounding box
     for index, circle in enumerate(circles_found):
         (x, y, r) = circle
-        logger.info(f"Found circle at {x}, {y} with radius {r}")
+        logger.info(f"Found circle at ({x}, {y}) with radius {r}")
         masked_image = hole_punch_mask(image, circle)
         cropped_image = cut_image(masked_image, circle_bbox(circle))
         image_logging.info(cropped_image, f"coin_{index}_({x},{y})")
