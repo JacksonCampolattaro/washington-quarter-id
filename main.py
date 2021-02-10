@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__)
 
 def find_circles(image, pix_radius):
     # Convert the image to grayscale
-    grayscale = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    grayscale = image # cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
     # Smooth the image
     blur = cv2.GaussianBlur(
@@ -23,7 +23,7 @@ def find_circles(image, pix_radius):
     image_logging.debug(blur, "blur")
 
     # Find the circles based on their edges
-    tolerance = 8
+    tolerance = 15
     circles = cv2.HoughCircles(
         image=blur,
         method=cv2.HOUGH_GRADIENT,
@@ -68,6 +68,12 @@ def rotate_image(image, degrees):
     return cv2.warpAffine(image, rot_mat, image.shape[1::-1], flags=cv2.INTER_LINEAR)
 
 
+def intensity_normalize_image(image):
+    (minIntensity, maxIntensity, _, _) = cv2.minMaxLoc(image)
+    average_intensity = (maxIntensity - minIntensity) / 2 # cv2.mean(image)[0]
+    return abs(image - average_intensity) * 2
+
+
 def main():
     # Set up logging
     dirname = "results/{:%Y%m%d_%H%M%S}/".format(datetime.now())
@@ -76,11 +82,12 @@ def main():
     logging.getLogger().addHandler(logging.StreamHandler(sys.stdout))
 
     # Load an image
-    image = cv2.imread("test.png")
+    image = cv2.imread("data/single/RelativeAngle=90deg_VerticalAngles=30,30deg_Distances=35,35cm,Rotation=135deg.png",
+                       0)
     logger.info(f"Loaded image of size {image.shape[0]}x{image.shape[1]}")
 
     # Search for circular elements in the image
-    circles_found = find_circles(image=image, pix_radius=314)
+    circles_found = find_circles(image=image, pix_radius=750)
 
     # Display each sub-image sliced using the circle's bounding box
     for index, circle in enumerate(circles_found):
@@ -88,7 +95,10 @@ def main():
         logger.info(f"Found circle at ({x}, {y}) with radius {r}")
         masked_image = hole_punch_mask(image, circle)
         cropped_image = cut_image(masked_image, circle_bbox(circle))
-        image_logging.info(cropped_image, f"coin_{index}_({x},{y})")
+        rotated_image = rotate_image(cropped_image, -135)
+        image_logging.info(rotated_image, f"coin_{index}_({x},{y})")
+        normalized_image = intensity_normalize_image(rotated_image)
+        image_logging.info(normalized_image, f"coin_{index}_({x},{y})_normalized")
         # cv2.imshow(f"Coin {index}", sub_image)
         # cv2.waitKey(0)
 
