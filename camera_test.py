@@ -1,4 +1,4 @@
-from capture import capture
+from quarterid.capture import capture
 import cv2
 
 
