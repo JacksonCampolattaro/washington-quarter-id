@@ -7,7 +7,7 @@ import cv2
 from quarterid import image_logging
 from quarterid.coin_isolation import split_coins
 from quarterid.coin_regularization import rotate_image, intensity_normalize_image
-from quarterid.preprocessing import intensity_clamp_image, preprocess
+from quarterid.preprocessing import intensity_clamp, preprocess
 
 logger = logging.getLogger(__name__)
 
