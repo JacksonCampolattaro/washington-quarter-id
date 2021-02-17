@@ -8,6 +8,7 @@ from quarterid import image_logging
 from quarterid.coin_isolation import split_coins
 from quarterid.coin_regularization import rotate_image, intensity_normalize_image
 from quarterid.preprocessing import intensity_clamp, preprocess
+from quarterid.coin_read import read_date
 
 logger = logging.getLogger(__name__)
 
@@ -32,11 +33,12 @@ def main():
         (x, y, r) = circle
 
         rotated_image = rotate_image(coin_image, 0)
-        #print("TYPE: ", rotated_image.type())
         image_logging.info(rotated_image, f"coin_{index}_({x},{y})")
 
         preprocessed_image = preprocess(rotated_image)
         image_logging.info(preprocessed_image, f"coin_{index}_({x},{y})_preprocessed")
+
+        read_date(preprocessed_image)
 
     # Annotate the original image, for debugging
     for _, (x, y, r) in coins_found:

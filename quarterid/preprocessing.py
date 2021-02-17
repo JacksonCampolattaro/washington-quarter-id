@@ -81,9 +81,9 @@ def preprocess(image):
     image = intensity_clamp(image, 90)
     image_logging.info(image, f"preprocessing_clamped")
 
-    image = watershed_segment(image)
-    image_logging.info(image, "preprocessing_watershed")
+    # image = watershed_segment(image)
+    # image_logging.info(image, "preprocessing_watershed")
 
-    #image = blur_threshold(image)
+    image = blur_threshold(image)
 
     return image
