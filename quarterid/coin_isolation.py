@@ -17,7 +17,6 @@ def find_circles(image, pix_radius):
         ksize=(5, 5),
         sigmaX=0
     )
-    image_logging.debug(blur, "blur")
 
     # Find the circles based on their edges
     tolerance = 15
