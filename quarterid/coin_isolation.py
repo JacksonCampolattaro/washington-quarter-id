@@ -1,7 +1,10 @@
 import cv2
 import numpy as np
+import logging
 
 from quarterid import image_logging
+
+logger = logging.getLogger(__name__)
 
 
 def find_circles(image, pix_radius):
@@ -53,3 +56,22 @@ def hole_punch_mask(image, circle):
 def cut_image(image, box):
     x1, y1, x2, y2 = box
     return image[y1:y2, x1:x2]
+
+
+def split_coins(image, pix_radius):
+    # Search for circular elements in the image
+    circles_found = find_circles(image=image, pix_radius=pix_radius)
+
+    coin_images_with_positions = []
+    for circle in circles_found:
+
+        (x, y, r) = circle
+        logger.info(f"Found circle at ({x}, {y}) with radius {r}")
+
+        masked_image = hole_punch_mask(image, circle)
+        cropped_image = cut_image(masked_image, circle_bbox(circle))
+
+        coin_images_with_positions.append((cropped_image, circle))
+
+    return coin_images_with_positions
+

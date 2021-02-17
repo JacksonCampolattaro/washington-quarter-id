@@ -6,7 +6,7 @@ import numpy as np
 import cv2
 
 from quarterid import image_logging
-from quarterid.coin_isolation import find_circles, circle_bbox, hole_punch_mask, cut_image
+from quarterid.coin_isolation import split_coins
 
 logger = logging.getLogger(__name__)
 
@@ -37,25 +37,20 @@ def main():
     logger.info(f"Loaded image of size {image.shape[0]}x{image.shape[1]}")
 
     # Search for circular elements in the image
-    circles_found = find_circles(image=image, pix_radius=750)
+    coins_found = split_coins(image=image, pix_radius=750)
 
-    # Display each sub-image sliced using the circle's bounding box
-    for index, circle in enumerate(circles_found):
+    # Iterate over all the coins that were found
+    for index, (coin_image, circle) in enumerate(coins_found):
         (x, y, r) = circle
-        logger.info(f"Found circle at ({x}, {y}) with radius {r}")
-        masked_image = hole_punch_mask(image, circle)
-        cropped_image = cut_image(masked_image, circle_bbox(circle))
-        rotated_image = rotate_image(cropped_image, 0)
+        rotated_image = rotate_image(coin_image, 0)
         image_logging.info(rotated_image, f"coin_{index}_({x},{y})")
         normalized_image = intensity_normalize_image(rotated_image)
         image_logging.info(normalized_image, f"coin_{index}_({x},{y})_normalized")
-        # cv2.imshow(f"Coin {index}", sub_image)
-        # cv2.waitKey(0)
 
     # Annotate the original image, for debugging
-    for (x, y, r) in circles_found:
+    for _, (x, y, r) in coins_found:
         # Draw a circle which outlines that one
-        cv2.circle(image, (x, y), r, (0, 255, 0), 4)
+        cv2.circle(image, (x, y), r, (255, 255, 255), 4)
     image_logging.info(image, "annotated")
 
 
