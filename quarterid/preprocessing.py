@@ -13,8 +13,13 @@ def intensity_clamp(image, percentile):
 
 
 def clean_binary(image):
-    image = cv2.adaptiveThreshold(image, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY_INV, 35, 2)
+    image = cv2.adaptiveThreshold(image, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY_INV, 55, 2)
     image_logging.info(image, f"preprocessing_binary")
+    return image
+
+
+def cover_margins(image, margin_thickness):
+    image = cv2.rectangle(image, (0, 0), image.shape[::-1], (0, 0, 0), margin_thickness * 2)
     return image
 
 
@@ -63,7 +68,6 @@ def watershed_segment(image):
 
 
 def blur_threshold(image):
-
     # Apply a blur to the image, to help remove noise
     image = cv2.GaussianBlur(image, ksize=(0, 0), sigmaX=5)
     image_logging.info(image, f"preprocessing_blurred")
@@ -76,14 +80,13 @@ def blur_threshold(image):
 
 
 def preprocess(image):
-
     # image = coin_regularization.intensity_normalize_image(image)
     # image_logging.info(image, f"preprocessing_normalized")
 
-    # # Clamp the image to remove extremely bright spots
-    # image = intensity_clamp(image, 90)
-    # image_logging.info(image, f"preprocessing_clamped")
-    #
+    # Clamp the image to remove extremely bright spots
+    image = intensity_clamp(image, 80)
+    image_logging.info(image, f"preprocessing_clamped")
+
     # image = watershed_segment(image)
     # image_logging.info(image, "preprocessing_watershed")
 

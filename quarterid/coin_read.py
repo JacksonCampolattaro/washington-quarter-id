@@ -4,7 +4,7 @@ import easyocr
 import logging
 
 from quarterid import image_logging
-from quarterid import coin_regularization, coin_isolation
+from quarterid import coin_regularization, coin_isolation, preprocessing
 
 logger = logging.getLogger(__name__)
 
@@ -15,11 +15,11 @@ def isolate_date(coin_image):
     side_length = coin_image.shape[0]
 
     # These determine the pixel size of the digits
-    char_width = int(side_length / 13)
+    char_width = int(side_length / 12)
     char_height = int(char_width * 1.25)
 
     # This determines the gap between the pixels and the bottom of the image
-    rim_thickness = int(side_length / 40)
+    rim_thickness = int(side_length / 45)
 
     # These are the bounds of the region we need to take
     char_start_x = int((side_length - char_width) / 2)
@@ -53,9 +53,13 @@ def read_date(coin_image):
     reader = easyocr.Reader(['en'])
 
     for i, image in enumerate(isolate_date(coin_image)):
+        image_logging.info(image, f"digit_{i}")
 
-        text = reader.readtext(image, allowlist="1234567890")
+        image = preprocessing.preprocess(image)
+        image = preprocessing.cover_margins(image, 15)
+        image_logging.info(image, f"preprocessed_digit_{i}")
+
+        text = reader.readtext(image, allowlist="1234567890", detail=1)
         print(text)
-        image_logging.info(image, f"{i}")
 
     return "2000"
