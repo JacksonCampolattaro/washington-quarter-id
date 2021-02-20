@@ -52,7 +52,7 @@ def watershedSeg(img):
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
     # Load an image and segment
-    rawimg = cv2.cvtColor(cv2.imread('image/date.png'), cv2.COLOR_BGR2GRAY)
+    rawimg = cv2.cvtColor(cv2.imread('image/Date.png'), cv2.COLOR_BGR2GRAY)
     img = imageClamp(rawimg, 0.75)
     cv2.imwrite('image/CLAMPED.png', img)
     (ROWS, COLS) = img.shape
@@ -76,6 +76,7 @@ if __name__ == '__main__':
         x = 1000
         if cv2.contourArea(c) > x:
             l,m,n,o = cv2.boundingRect(c)
-            cv2.drawContours(cont, [c], -1, (255, 255, 255), 0)
+            cv2.drawContours(cont, [c], -1, (0, 0, 0), 5)
+            cv2.drawContours(cont, [c], -1, (255, 255, 255), -1)
 
     cv2.imwrite('image/Contours.png', cont)
