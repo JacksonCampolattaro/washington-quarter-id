@@ -4,7 +4,7 @@ import pytesseract
 pytesseract.pytesseract.tesseract_cmd = "C:\\Users\\pashf\\AppData\\Local\\Programs\\Tesseract-OCR\\tesseract.exe"
 
 
-img = cv2.imread('Image/htest.jpg')
+img = cv2.imread('Image/Capture3.JPG')
 img = cv2.cvtColor(img,cv2.COLOR_BGR2RGB)
 #print(pytesseract.image_to_string(img))
 #print(pytesseract.image_to_boxes(img))
