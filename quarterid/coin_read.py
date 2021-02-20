@@ -19,7 +19,7 @@ def isolate_date(coin_image):
     char_height = int(char_width * 1.25)
 
     # This determines the gap between the pixels and the bottom of the image
-    rim_thickness = int(side_length / 45)
+    rim_thickness = int(side_length / 60)
 
     # These are the bounds of the region we need to take
     char_start_x = int((side_length - char_width) / 2)
@@ -56,7 +56,8 @@ def read_date(coin_image):
         image_logging.info(image, f"digit_{i}")
 
         image = preprocessing.preprocess(image)
-        image = preprocessing.cover_margins(image, 15)
+        image = preprocessing.cover_margins(image, int(image.shape[0] / 7))
+        image = preprocessing.largest_contour_only(image)
         image_logging.info(image, f"preprocessed_digit_{i}")
 
         text = reader.readtext(image, allowlist="1234567890", detail=1)

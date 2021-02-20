@@ -7,13 +7,30 @@ from quarterid import image_logging, coin_regularization
 logger = logging.getLogger(__name__)
 
 
+def largest_contour_only(image):
+
+    # Find the largest countour (by area)
+    contours, _ = cv2.findContours(image, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
+    largest_contour = max(contours, key=cv2.contourArea)
+
+    # Create a mask containing only that contour
+    mask = image.copy() * 0
+    cv2.fillPoly(mask, pts=[largest_contour], color=(1, 1, 1))
+
+    # Apply that mask to the original image
+    return image * mask
+
+
 def intensity_clamp(image, percentile):
     new_max_intensity = np.percentile(image, percentile)
     return np.clip(image, 0, new_max_intensity).astype(np.uint8)
 
 
 def clean_binary(image):
-    image = cv2.adaptiveThreshold(image, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY_INV, 55, 2)
+    image = cv2.adaptiveThreshold(image, maxValue=255,
+                                  adaptiveMethod=cv2.ADAPTIVE_THRESH_GAUSSIAN_C,
+                                  thresholdType=cv2.THRESH_BINARY_INV,
+                                  blockSize=65, C=3.5)
     image_logging.info(image, f"preprocessing_binary")
     return image
 
@@ -84,7 +101,7 @@ def preprocess(image):
     # image_logging.info(image, f"preprocessing_normalized")
 
     # Clamp the image to remove extremely bright spots
-    image = intensity_clamp(image, 80)
+    image = intensity_clamp(image, 85)
     image_logging.info(image, f"preprocessing_clamped")
 
     # image = watershed_segment(image)
