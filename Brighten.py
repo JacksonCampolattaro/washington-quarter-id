@@ -10,6 +10,7 @@ alpha = 3.0 # Simple contrast control
 beta = -127    # Simple brightness control
 out = cv2.addWeighted(simg, alpha, simg, 0, beta)
 output = cv2.addWeighted
+#thresh = cv2.threshold()
 #cv2.imshow('Original Image', img)
 cv2.imshow('New Image', out)
 cv2.imwrite("image/contrast.jpg", out)
