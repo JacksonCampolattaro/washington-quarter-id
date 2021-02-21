@@ -4,13 +4,13 @@ import easyocr
 import logging
 
 from quarterid import image_logging
-from quarterid import coin_regularization, coin_isolation, preprocessing
+from quarterid import coin_regularization, coin_isolation
+from quarterid.preprocessing import preprocess, largest_contour_only, cover_margins
 
 logger = logging.getLogger(__name__)
 
 
 def isolate_date(coin_image):
-
     # We can assume our image is square
     side_length = coin_image.shape[0]
 
@@ -34,7 +34,6 @@ def isolate_date(coin_image):
     # We can *probably* trust that our dates will have 4 digits
     digits = []
     for _ in range(4):
-
         # Cut out this digit
         digits.append(coin_isolation.cut_image(rotated_image, char_box))
 
@@ -49,18 +48,36 @@ def isolate_mint_mark(coin_image):
 
 
 def read_date(coin_image):
-
+    # Create an EasyOCR reader set to english
     reader = easyocr.Reader(['en'])
 
-    for i, image in enumerate(isolate_date(coin_image)):
-        image_logging.info(image, f"digit_{i}")
+    # Split the coin into digit images
+    digits = isolate_date(coin_image)
+    [image_logging.info(d, f"digit_{i}") for i, d in enumerate(digits)]
 
-        image = preprocessing.preprocess(image)
-        image = preprocessing.cover_margins(image, int(image.shape[0] / 7))
-        image = preprocessing.largest_contour_only(image)
-        image_logging.info(image, f"preprocessed_digit_{i}")
+    # Convert our digit images to binary
+    digits = [preprocess(digit) for digit in digits]
 
-        text = reader.readtext(image, allowlist="1234567890", detail=1)
-        print(text)
+    # Remove noise near the margins of our images
+    digits = [cover_margins(digit, int(digit.shape[0] / 7)) for digit in digits]
 
+    # Eliminate all but the largest contour from each digit
+    digits = [largest_contour_only(digit) for digit in digits]
+
+    [image_logging.info(d, f"preprocessed_digit_{i}") for i, d in enumerate(digits)]
+
+    # Split the digits up, because we'll be treating parts of the date separately
+    millennium, century, decade, year = digits
+
+    # Each digit is allowed to have different possible values
+    millennium_result = reader.readtext(millennium, allowlist="12", detail=1)
+    print(millennium_result)
+    century_result = reader.readtext(century, allowlist="890", detail=1)
+    print(century_result)
+    decade_result = reader.readtext(decade, allowlist="1234567890", detail=1)
+    print(decade_result)
+    year_result = reader.readtext(year, allowlist="1234567890", detail=1)
+    print(year_result)
+
+    # TODO
     return "2000"
