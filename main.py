@@ -7,7 +7,6 @@ import cv2
 from quarterid import image_logging
 from quarterid.coin_isolation import split_coins
 from quarterid.coin_regularization import rotate_image, intensity_normalize_image
-from quarterid.preprocessing import intensity_clamp, preprocess
 from quarterid.coin_read import read_date
 
 logger = logging.getLogger(__name__)
@@ -21,24 +20,24 @@ def main():
     logging.getLogger().addHandler(logging.StreamHandler(sys.stdout))
 
     # Load an image
-    image = cv2.imread("data/single/RelativeAngle=90deg_VerticalAngles=30,30deg_Distances=35,35cm,Rotation=0deg.png",
-                       cv2.IMREAD_GRAYSCALE)
+    image = cv2.imread(
+        "data/single/RelativeAngle=90deg_VerticalAngles=25,25deg_Distances=43,43cm,Rotation=0deg,1995.png",
+        cv2.IMREAD_GRAYSCALE
+    )
     logger.info(f"Loaded image of size {image.shape[0]}x{image.shape[1]}")
 
     # Search for circular elements in the image
-    coins_found = split_coins(image=image, pix_radius=750)
+    coins_found = split_coins(image=image, pix_radius=749)
 
     # Iterate over all the coins that were found
     for index, (coin_image, circle) in enumerate(coins_found):
         (x, y, r) = circle
 
-        rotated_image = rotate_image(coin_image, 0)
+        # TODO Find coin rotation
+        rotated_image = rotate_image(coin_image, -1)
         image_logging.info(rotated_image, f"coin_{index}_({x},{y})")
 
-        preprocessed_image = preprocess(rotated_image)
-        image_logging.info(preprocessed_image, f"coin_{index}_({x},{y})_preprocessed")
-
-        read_date(preprocessed_image)
+        read_date(rotated_image)
 
     # Annotate the original image, for debugging
     for _, (x, y, r) in coins_found:
