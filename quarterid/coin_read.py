@@ -16,10 +16,10 @@ def isolate_date(coin_image):
 
     # These determine the pixel size of the digits
     char_width = int(side_length / 12)
-    char_height = int(char_width * 1.25)
+    char_height = int(char_width * 1.20)
 
     # This determines the gap between the pixels and the bottom of the image
-    rim_thickness = int(side_length / 60)
+    rim_thickness = int(side_length / 30)
 
     # These are the bounds of the region we need to take
     char_start_x = int((side_length - char_width) / 2)
@@ -38,7 +38,7 @@ def isolate_date(coin_image):
         digits.append(coin_isolation.cut_image(rotated_image, char_box))
 
         # Rotate the image to the next digit
-        rotated_image = coin_regularization.rotate_image(rotated_image, -14)
+        rotated_image = coin_regularization.rotate_image(rotated_image, -13)
 
     return digits
 
