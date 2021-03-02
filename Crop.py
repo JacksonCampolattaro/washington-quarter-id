@@ -13,9 +13,9 @@ h1 = int(height*.83)
 h2 = int(height*.96)
 
 w3 = int(width*.80)
-w4 = int(width*.90)
-h3 = int(height*.65)
-h4 = int(height*.75)
+w4 = int(width*.85)
+h3 = int(height*.67)
+h4 = int(height*.73)
 
 date = img[h1:h2, w1:w2]
 mint = img[h3:h4, w3:w4]
@@ -48,7 +48,7 @@ w6 = int(wi*.70)
 h5 = int(hi*.29)
 h6 = int(hi*.99)
 num3 = date[h5:h6, w5:w6]
-cv2.imwrite("image/7.png", num3)
+cv2.imwrite("image/8.png", num3)
 
 wi = int(date.shape[1])
 hi = int(date.shape[0])
@@ -58,6 +58,6 @@ h5 = int(hi*.19)
 h6 = int(hi*.9)
 num3 = date[h5:h6, w5:w6]
 d1 = rotate_image(num3, -15)
-cv2.imwrite("image/3.png", d1)
+cv2.imwrite("image/4.png", d1)
 
 cv2.waitKey(0)
