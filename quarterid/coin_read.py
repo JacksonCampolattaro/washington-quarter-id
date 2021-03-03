@@ -51,13 +51,14 @@ def isolate_mint_mark(coin_image):
     mint_width = int(side_length / 20)
     mint_height = mint_width
 
-    mint_start_x = int(side_length * 0.80)
-    mint_start_y = int(side_length * 0.65)
+    # Find the coordinates defining the mint mark's location
+    mint_start_x = int(side_length * 0.81)
+    mint_start_y = int(side_length * 0.69)
     mint_end_x = mint_start_x + mint_width
     mint_end_y = mint_start_y + mint_height
     mint_box = (mint_start_x, mint_start_y, mint_end_x, mint_end_y)
 
-    return coin_image
+    return coin_isolation.cut_image(coin_image, mint_box)
 
 
 def read_character(character_image, allowlist, default):
@@ -115,4 +116,7 @@ def read_date(coin_image):
 
 
 def read_mint(coin_image):
-    return 'm'
+
+    mint_image = isolate_mint_mark(coin_image)
+
+    return read_character(mint_image, "DP", 'D')
