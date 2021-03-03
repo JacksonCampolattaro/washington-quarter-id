@@ -21,20 +21,21 @@ def main():
 
     # Load an image
     image = cv2.imread(
-        "data/single/RelativeAngle=90deg_VerticalAngles=25,25deg_Distances=43,43cm,Rotation=0deg,1995.png",
+        "data/single/RelativeAngle=90deg_VerticalAngles=30,30deg_Distances=35,35cm,Rotation=0deg.png",
+        # "data/mixed/1995.png",
         cv2.IMREAD_GRAYSCALE
     )
     logger.info(f"Loaded image of size {image.shape[0]}x{image.shape[1]}")
 
     # Search for circular elements in the image
-    coins_found = split_coins(image=image, pix_radius=749)
+    coins_found = split_coins(image=image, pix_radius=745)
 
     # Iterate over all the coins that were found
     for index, (coin_image, circle) in enumerate(coins_found):
         (x, y, r) = circle
 
         # TODO Find coin rotation
-        rotated_image = rotate_image(coin_image, -1)
+        rotated_image = rotate_image(coin_image, 0)
         image_logging.info(rotated_image, f"coin_{index}_({x},{y})")
 
         read_date(rotated_image)
