@@ -38,7 +38,7 @@ def main():
         rotated_image = rotate_image(coin_image, 0)
         image_logging.info(rotated_image, f"coin_{index}_({x},{y})")
 
-        read_date(rotated_image)
+        print(read_date(rotated_image))
 
     # Annotate the original image, for debugging
     for _, (x, y, r) in coins_found:

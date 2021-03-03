@@ -19,7 +19,7 @@ def isolate_date(coin_image):
     char_height = int(char_width * 1.10)
 
     # This determines the gap between the pixels and the bottom of the image
-    rim_thickness = int(side_length / 100)
+    rim_thickness = int(side_length * 0.0)
 
     # These are the bounds of the region we need to take
     char_start_x = int((side_length - char_width) / 2)
@@ -44,11 +44,23 @@ def isolate_date(coin_image):
 
 
 def isolate_mint_mark(coin_image):
+    # We can assume our image is square
+    side_length = coin_image.shape[0]
+
+    # These determine the pixel size of the mint mark
+    mint_width = int(side_length / 20)
+    mint_height = mint_width
+
+    mint_start_x = int(side_length * 0.80)
+    mint_start_y = int(side_length * 0.65)
+    mint_end_x = mint_start_x + mint_width
+    mint_end_y = mint_start_y + mint_height
+    mint_box = (mint_start_x, mint_start_y, mint_end_x, mint_end_y)
+
     return coin_image
 
 
 def read_character(character_image, allowlist, default):
-
     read_character.call_count += 1
 
     # Log the image
@@ -86,21 +98,21 @@ read_character.call_count = 0
 
 
 def read_date(coin_image):
-
     digits = isolate_date(coin_image)
 
     # Split the digits up, because we'll be treating parts of the date separately
     millennium, century, decade, year = digits
 
     # Each digit is allowed to have different possible values
-    millennium_result = read_character(millennium, "12", '1')
-    print(millennium_result)
-    century_result = read_character(century, "90", '0')
-    print(century_result)
-    decade_result = read_character(decade, "34567890", '1')
-    print(decade_result)
-    year_result = read_character(year, "1234567890", '1')
-    print(year_result)
+    millennium, millennium_confidence = read_character(millennium, "12", '1')
+    century, century_confidence = read_character(century, "90", '0')
+    decade, decade_confidence = read_character(decade, "34567890", '1')
+    year, year_confidence = read_character(year, "1234567890", '1')
 
-    # TODO
-    return "2000"
+    combined_confidence = sum([millennium_confidence, century_confidence, decade_confidence, year_confidence]) / 4
+
+    return millennium + century + decade + year, combined_confidence
+
+
+def read_mint(coin_image):
+    return 'm'
