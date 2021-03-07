@@ -14,6 +14,7 @@ ret, thresh = cv2.threshold(img, 127, 255,0)
 ret, thresh2 = cv2.threshold(img2, 127, 255,0)
 ret, thresh3 = cv2.threshold(pint, 127, 255,0)
 ret, thresh4 = cv2.threshold(diff, 127, 255,0)
+ret, thresh5 = cv2.threshold(rect, 127, 255,0)
 
 cv2.imwrite('Image/thresh.png', thresh)
 cont = np.zeros(thresh.shape)
@@ -49,22 +50,29 @@ cv2.drawContours(cont, cnt4, -1, (255, 255, 255), -1)
 cv2.drawContours(cont, cntd, -1, (255, 255, 255), -1)
 cv2.imwrite('image/C4.png', cont)
 
+contours,hierarchy = cv2.findContours(thresh5,2,1)
+cnt5 = contours[0]
+cont = np.zeros(thresh5.shape)
+cv2.drawContours(cont, cnt5, -1, (255, 255, 255), -1)
+cv2.imwrite('image/C5.png', cont)
+
 r = cv2.matchShapes(cnt1,cnt2,3,0.0)
-
-d = (cv2.matchShapes(cnt1,cnt3,3,0.0) + cv2.matchShapes(cnta,cntc,3,0.0))/2
-p = (cv2.matchShapes(cnt1,cnt4,3,0.0) + cv2.matchShapes(cnta,cntd,3,0.0))/2
+p = (cv2.matchShapes(cnt1,cnt3,3,0.0) + cv2.matchShapes(cnta,cntc,3,0.0))/2
+d = (cv2.matchShapes(cnt1,cnt4,3,0.0) + cv2.matchShapes(cnta,cntd,3,0.0))/2
+o = cv2.matchShapes(cnt1,cnt5,3,0.0)
 #test = cv2.matchShapes(cnt2,cnt4,3,0.0)
-
+print(o)
 print(r)
-print(d)
 print(p)
+print(d)
 #print(test)
-
-if r == min(r,d,p):
+if o == min(o,r,d,p):
+    print('its a 1')
+if r == min(o,r,d,p):
     print('its a 2')
-if d == min(r,d,p):
+if p == min(o,r,d,p):
     print('its a p')
-if p == min(r,d,p):
+if d == min(o,r,d,p):
     print('its a d')
 
 
