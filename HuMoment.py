@@ -19,11 +19,17 @@ ret, thresh5 = cv2.threshold(rect, 127, 255,0)
 cv2.imwrite('Image/thresh.png', thresh)
 cont = np.zeros(thresh.shape)
 contours,hierarchy = cv2.findContours(thresh,2,1)
-
+x = 0
 cnt1 = contours[0]
-cnta = contours[1]
 cv2.drawContours(cont, cnt1, -1, (255, 255, 255), -1)
-cv2.drawContours(cont, cnta, -1, (255, 255, 255), -1)
+try:
+    contours[1]
+except IndexError:
+    x = 1
+else:
+    x = 2
+    cnta = contours[1]
+    cv2.drawContours(cont, cnta, -1, (255, 255, 255), -1)
 cv2.imwrite('image/C1.png', cont)
 
 cont = np.zeros(thresh2.shape)
@@ -57,10 +63,13 @@ cv2.drawContours(cont, cnt5, -1, (255, 255, 255), -1)
 cv2.imwrite('image/C5.png', cont)
 
 r = cv2.matchShapes(cnt1,cnt2,3,0.0)
-p = (cv2.matchShapes(cnt1,cnt3,3,0.0) + cv2.matchShapes(cnta,cntc,3,0.0))/2
-d = (cv2.matchShapes(cnt1,cnt4,3,0.0) + cv2.matchShapes(cnta,cntd,3,0.0))/2
 o = cv2.matchShapes(cnt1,cnt5,3,0.0)
-#test = cv2.matchShapes(cnt2,cnt4,3,0.0)
+if x == 2:
+    p = (cv2.matchShapes(cnt1, cnt3, 3, 0.0)  + cv2.matchShapes(cnta,cntc,3,0.0))/2
+    d = (cv2.matchShapes(cnt1, cnt4, 3, 0.0)  + cv2.matchShapes(cnta,cntd,3,0.0))/2
+else:
+    p = cv2.matchShapes(cnt1, cnt3, 3, 0.0) 
+    d = cv2.matchShapes(cnt1, cnt4, 3, 0.0)
 print(o)
 print(r)
 print(p)

@@ -52,7 +52,7 @@ def watershedSeg(img):
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
     # Load an image and segment
-    rawimg = cv2.cvtColor(cv2.imread('image/MintMark.png'), cv2.COLOR_BGR2GRAY)
+    rawimg = cv2.cvtColor(cv2.imread('image/1.png'), cv2.COLOR_BGR2GRAY)
     img = imageClamp(rawimg, 0.75)
     cv2.imwrite('image/CLAMPED.png', img)
     (ROWS, COLS) = img.shape
@@ -66,19 +66,19 @@ if __name__ == '__main__':
     meanThrImg = cv2.adaptiveThreshold(smoothed, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY_INV, 65, 2)
     cv2.imwrite('image/MeanThr.png', meanThrImg)
 
-    gaussThrImg = cv2.adaptiveThreshold(smoothed, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY_INV, 195, 15)
+    gaussThrImg = cv2.adaptiveThreshold(smoothed, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY_INV, 65, 2)
     cv2.imwrite('image/GaussThr.png', gaussThrImg)
 
     contours, hierarchy = cv2.findContours(gaussThrImg, 2, 2)
     contoursImg = gaussThrImg.copy()
     cont = np.zeros(gaussThrImg.shape)
     for c in contours:
-        x = 700
+        x = 1100
         #y = 1200
         if cv2.contourArea(c) > x:
             #if cv2.contourArea(c) < y:
                 l,m,n,o = cv2.boundingRect(c)
                 #cv2.drawContours(cont, [c], -1, (0,0, 0), 10)
-                cv2.drawContours(cont, [c], -1, (255, 255, 255), 2)
+                cv2.drawContours(cont, [c], -1, (255, 255, 255), 4)
 
     cv2.imwrite('image/Contours.png', cont)
