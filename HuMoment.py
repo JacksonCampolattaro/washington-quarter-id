@@ -25,21 +25,21 @@ cnt3 = contours[0]
 contours,hierarchy = cv2.findContours(thresh4,2,1)
 cnt4 = contours[0]
 
-ret = cv2.matchShapes(cnt1,cnt2,3,0.0)
+r = cv2.matchShapes(cnt1,cnt2,3,0.0)
 d = cv2.matchShapes(cnt1,cnt3,3,0.0)
 p = cv2.matchShapes(cnt1,cnt4,3,0.0)
 #test = cv2.matchShapes(cnt2,cnt4,3,0.0)
 
-print(ret)
+print(r)
 print(d)
 print(p)
 #print(test)
 
-if ret == min(ret,d,p):
+if ret == min(r,d,p):
     print('its a 1')
-if d == min(ret,d,p):
+if d == min(r,d,p):
     print('its a 2')
-if p == min(ret,d,p):
+if p == min(r,d,p):
     print('its a d')
 
 
