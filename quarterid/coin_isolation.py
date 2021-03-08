@@ -19,7 +19,7 @@ def find_circles(image, pix_radius):
     )
 
     # Find the circles based on their edges
-    tolerance = 15
+    tolerance = 10
     circles = cv2.HoughCircles(
         image=blur,
         method=cv2.HOUGH_GRADIENT,

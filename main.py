@@ -28,7 +28,7 @@ def main():
     logger.info(f"Loaded image of size {image.shape[0]}x{image.shape[1]}")
 
     # Search for circular elements in the image
-    coins_found = split_coins(image=image, pix_radius=745)
+    coins_found = split_coins(image=image, pix_radius=731)
 
     # Iterate over all the coins that were found
     for index, (coin_image, circle) in enumerate(coins_found):
