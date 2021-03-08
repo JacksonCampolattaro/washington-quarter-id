@@ -61,9 +61,10 @@ cnt5 = contours[0]
 cont = np.zeros(thresh5.shape)
 cv2.drawContours(cont, cnt5, -1, (255, 255, 255), -1)
 cv2.imwrite('image/C5.png', cont)
+if x == 1:
+    r = cv2.matchShapes(cnt1,cnt2,3,0.0)
+    o = cv2.matchShapes(cnt1,cnt5,3,0.0)
 
-r = cv2.matchShapes(cnt1,cnt2,3,0.0)
-o = cv2.matchShapes(cnt1,cnt5,3,0.0)
 if x == 2:
     p = (cv2.matchShapes(cnt1, cnt3, 3, 0.0)  + cv2.matchShapes(cnta,cntc,3,0.0))/2
     d = (cv2.matchShapes(cnt1, cnt4, 3, 0.0)  + cv2.matchShapes(cnta,cntd,3,0.0))/2
