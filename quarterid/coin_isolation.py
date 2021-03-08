@@ -14,7 +14,7 @@ def find_circles(image, pix_radius):
     # Smooth the image
     blur = cv2.GaussianBlur(
         src=grayscale,
-        ksize=(5, 5),
+        ksize=(3, 3),
         sigmaX=0
     )
 

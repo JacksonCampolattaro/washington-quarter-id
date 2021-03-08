@@ -29,7 +29,7 @@ def single_capture():
 
     # Save the image
     cv2.imwrite(
-        "data/single/RelativeAngle={}deg_VerticalAngles={},{}deg_Distances={},{}cm,Rotation={}deg,1995.png".format(
+        "data/single/RelativeAngle={}deg_VerticalAngles={},{}deg_Distances={},{}cm,Rotation={}deg,2147,1121,730.png".format(
             rel_angle,
             l1_angle,
             l2_angle,

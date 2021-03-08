@@ -21,8 +21,8 @@ def main():
 
     # Load an image
     image = cv2.imread(
-        "data/single/RelativeAngle=90deg_VerticalAngles=30,30deg_Distances=35,35cm,Rotation=0deg.png",
-        # "data/mixed/1995.png",
+        #"data/single/RelativeAngle=90deg_VerticalAngles=30,30deg_Distances=35,35cm,Rotation=0deg.png",
+        "data/mixed/1996.png",
         cv2.IMREAD_GRAYSCALE
     )
     logger.info(f"Loaded image of size {image.shape[0]}x{image.shape[1]}")
@@ -35,7 +35,7 @@ def main():
         (x, y, r) = circle
 
         # TODO Find coin rotation
-        rotated_image = rotate_image(coin_image, 0)
+        rotated_image = rotate_image(coin_image, -1)
         image_logging.info(rotated_image, f"coin_{index}_({x},{y})")
 
         print(read_date(rotated_image))
