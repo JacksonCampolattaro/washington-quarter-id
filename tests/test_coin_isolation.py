@@ -29,9 +29,8 @@ class TestCoinIsolation(unittest.TestCase):
 
     def test_find_circles(self):
 
-        for (image, known_circle) in self.images:
-            (known_x, known_y, known_r) = known_circle
-            with self.subTest(position=known_circle):
+        for (image, known_location) in self.images:
+            with self.subTest(location=known_location):
 
                 # Use our function to find the locations
                 locations = coin_isolation.find_circles(image, pix_radius=731)
@@ -41,6 +40,7 @@ class TestCoinIsolation(unittest.TestCase):
 
                 # The location of the coin should be pretty close to the known correct location
                 (x, y, r) = locations[0]
-                self.assertAlmostEqual(known_x, x, delta=5, msg="Incorrect x")
-                self.assertAlmostEqual(known_y, y, delta=5, msg="Incorrect y")
-                self.assertAlmostEqual(known_r, r, delta=10, msg="Incorrect radius!")
+                (known_x, known_y, known_r) = known_location
+                self.assertAlmostEqual(known_x, x, delta=10, msg="Incorrect x")
+                self.assertAlmostEqual(known_y, y, delta=10, msg="Incorrect y")
+                self.assertAlmostEqual(known_r, r, delta=10, msg="Incorrect radius")

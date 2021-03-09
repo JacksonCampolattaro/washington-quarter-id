@@ -30,12 +30,13 @@ def clean_binary(image):
     image = cv2.adaptiveThreshold(image, maxValue=255,
                                   adaptiveMethod=cv2.ADAPTIVE_THRESH_GAUSSIAN_C,
                                   thresholdType=cv2.THRESH_BINARY_INV,
-                                  blockSize=65, C=3.5)
+                                  blockSize=35, C=2)
     image_logging.info(image, f"preprocessing_binary")
     return image
 
 
 def cover_margins(image, margin_thickness):
+    # image = cv2.rectangle(image, (0, 0), image.shape[::-1], (0, 0, 0), margin_thickness * 2)
     image = cv2.rectangle(image, (0, 0), image.shape[::-1], (0, 0, 0), margin_thickness * 2)
     return image
 
@@ -101,7 +102,7 @@ def preprocess(image):
     # image_logging.info(image, f"preprocessing_normalized")
 
     # Clamp the image to remove extremely bright spots
-    image = intensity_clamp(image, 85)
+    image = intensity_clamp(image, 75)
     image_logging.info(image, f"preprocessing_clamped")
 
     # image = watershed_segment(image)

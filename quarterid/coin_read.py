@@ -15,11 +15,11 @@ def isolate_date(coin_image):
     side_length = coin_image.shape[0]
 
     # These determine the pixel size of the digits
-    char_width = int(side_length / 9)
-    char_height = int(char_width * 1.10)
+    char_width = int(side_length / 10)
+    char_height = int(char_width * 1.50)
 
     # This determines the gap between the pixels and the bottom of the image
-    rim_thickness = int(side_length * 0.0)
+    rim_thickness = int(side_length * 0.00)
 
     # These are the bounds of the region we need to take
     char_start_x = int((side_length - char_width) / 2)
@@ -71,7 +71,7 @@ def read_character(character_image, allowlist, default):
     character_image = preprocess(character_image)
 
     # Remove noise near the margins of our image
-    character_image = cover_margins(character_image, int(character_image.shape[0] / 7))
+    character_image = cover_margins(character_image, int(character_image.shape[0] / 9))
 
     # Eliminate all but the largest contour from the binary image
     character_image = largest_contour_only(character_image)
@@ -90,7 +90,11 @@ def read_character(character_image, allowlist, default):
     character_detected = result[0][1]
     confidence = result[0][2]
 
-    return character_detected, confidence
+    # If an empty character was found, return the default
+    if not character_detected:
+        return default, 0.0
+
+    return character_detected[-1], confidence
 
 
 # TODO: I don't like doing this!
@@ -106,7 +110,7 @@ def read_date(coin_image):
 
     # Each digit is allowed to have different possible values
     millennium, millennium_confidence = read_character(millennium, "12", '1')
-    century, century_confidence = read_character(century, "90", '0')
+    century, century_confidence = read_character(century, "90", '9')
     decade, decade_confidence = read_character(decade, "34567890", '1')
     year, year_confidence = read_character(year, "1234567890", '1')
 
