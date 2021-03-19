@@ -13,20 +13,25 @@ def find_circles(image, pix_radius):
 
     # Smooth the image
     blur = cv2.GaussianBlur(
-        src=grayscale,
-        ksize=(3, 3),
-        sigmaX=0
+        src=image,
+        ksize=(0, 0),
+        sigmaX=5
     )
+    image_logging.debug(blur, "circle_finding_blur")
+
+    # Binarize the image
+    _, binary = cv2.threshold(blur, 30, 255, cv2.THRESH_BINARY)
+    image_logging.debug(binary, "circle_finding_binary")
 
     # Find the circles based on their edges
-    tolerance = 10
+    tolerance = 7
     circles = cv2.HoughCircles(
-        image=blur,
+        image=binary,
         method=cv2.HOUGH_GRADIENT,
         dp=2,
         minDist=(pix_radius * 2) - (tolerance * 4),
         param1=100,
-        param2=100,
+        param2=30,
         minRadius=pix_radius - tolerance,
         maxRadius=pix_radius + tolerance
     )
