@@ -23,7 +23,7 @@ def main():
     # Load an image
     image = cv2.imread(
         #"data/single/RelativeAngle=90deg_VerticalAngles=30,30deg_Distances=35,35cm,Rotation=0deg.png",
-        "data/mixed/1995.png",
+        "data/mixed/1996.png",
         cv2.IMREAD_GRAYSCALE
     )
     # image = capture.capture()
