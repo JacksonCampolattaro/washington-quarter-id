@@ -16,18 +16,21 @@ def main():
         cv2.IMREAD_GRAYSCALE
     )
     assert image is not None
+    #image = coin_regularization.rotate_image(image, 120)
 
     # Keep track of the correct date, based on the image name
     correct_date = os.path.splitext(os.path.basename(filename))[0]
 
     # Create a plot
     axis = plt.subplot(projection='polar')
-    axis.set_title("Coin-reading confidence as a function of image rotation")
+    axis.set_title("Coin-reading confidence as a function of image rotation (1967)")
     axis.set_theta_zero_location("S")
     axis.set_rmax(1.0)
 
     # Try the image at every angle
-    for angle in np.linspace(-180, 180, 100):
+    steps = 36
+    for angle in np.linspace(-180, 180, steps):
+
         # Make a prediction based on a rotated image
         prediction, confidence = coin_read.read_date(coin_regularization.rotate_image(image, angle))
         print(f"\t{angle:.2f}°:\t\t{confidence:.2f}%\t[{prediction}]")
@@ -37,7 +40,8 @@ def main():
 
         # Add the confidence to the plot
         radian = angle * np.pi / 180
-        axis.bar(radian, confidence, width=0.1, bottom=0, color=color)
+        step_width = 2 * np.pi / steps
+        axis.bar(radian, confidence, width=step_width, bottom=0, color=color)
 
     # Display the plot
     plt.show()
