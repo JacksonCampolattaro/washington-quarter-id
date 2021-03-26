@@ -16,19 +16,20 @@ def main():
         cv2.IMREAD_GRAYSCALE
     )
     assert image is not None
-    #image = coin_regularization.rotate_image(image, 120)
+    # image = coin_regularization.rotate_image(image, 120)
 
     # Keep track of the correct date, based on the image name
     correct_date = os.path.splitext(os.path.basename(filename))[0]
 
     # Create a plot
+    plt.style.use('dark_background')
     axis = plt.subplot(projection='polar')
     axis.set_title("Coin-reading confidence as a function of image rotation (1967)")
     axis.set_theta_zero_location("S")
     axis.set_rmax(1.0)
 
     # Try the image at every angle
-    steps = 36
+    steps = 3000
     for angle in np.linspace(-180, 180, steps):
 
         # Make a prediction based on a rotated image
