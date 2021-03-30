@@ -29,7 +29,7 @@ def main():
     axis.set_rmax(1.0)
 
     # Try the image at every angle
-    steps = 3000
+    steps = 90
     for angle in np.linspace(-180, 180, steps):
 
         # Make a prediction based on a rotated image

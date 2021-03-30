@@ -1,11 +1,9 @@
 import numpy as np
 import cv2
-import easyocr
 import logging
 
-from quarterid import image_logging
 from quarterid import coin_regularization, coin_isolation
-from quarterid.preprocessing import preprocess, largest_contour_only, cover_margins
+from quarterid.ocr import easy, hu_moment
 
 logger = logging.getLogger(__name__)
 
@@ -62,44 +60,7 @@ def isolate_mint_mark(coin_image):
 
 
 def read_character(character_image, allowlist, default):
-    read_character.call_count += 1
-
-    # Log the image
-    image_logging.info(character_image, f"digit_{read_character.call_count}")
-
-    # Convert our image to binary
-    character_image = preprocess(character_image)
-
-    # Remove noise near the margins of our image
-    character_image = cover_margins(character_image, int(character_image.shape[0] / 9))
-
-    # Eliminate all but the largest contour from the binary image
-    character_image = largest_contour_only(character_image)
-
-    # Log the image
-    image_logging.info(character_image, f"preprocessed_digit_{read_character.call_count}")
-
-    # Try to read the image
-    result = read_character.reader.readtext(character_image, allowlist=allowlist)
-
-    # If no characters were found, return the default
-    if not result:
-        return default, 0.0
-
-    # Otherwise, interpret the result
-    character_detected = result[0][1]
-    confidence = result[0][2]
-
-    # If an empty character was found, return the default
-    if not character_detected:
-        return default, 0.0
-
-    return character_detected[-1], confidence
-
-
-# TODO: I don't like doing this!
-read_character.reader = easyocr.Reader(['en'])
-read_character.call_count = 0
+    return easy.read_character(character_image, allowlist, default)
 
 
 def read_date(coin_image):
@@ -111,7 +72,7 @@ def read_date(coin_image):
     # Each digit is allowed to have different possible values
     millennium, millennium_confidence = read_character(millennium, "12", '1')
     century, century_confidence = read_character(century, "90", '9')
-    decade, decade_confidence = read_character(decade, "34567890", '1')
+    decade, decade_confidence = read_character(decade, "34567890", '9')
     year, year_confidence = read_character(year, "1234567890", '1')
 
     combined_confidence = sum([millennium_confidence, century_confidence, decade_confidence, year_confidence]) / 4
@@ -120,7 +81,6 @@ def read_date(coin_image):
 
 
 def read_mint(coin_image):
-
     mint_image = isolate_mint_mark(coin_image)
 
     return read_character(mint_image, "DP", 'D')

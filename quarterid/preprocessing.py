@@ -26,7 +26,7 @@ def intensity_clamp(image, percentile):
     return np.clip(image, 0, new_max_intensity).astype(np.uint8)
 
 
-def clean_binary(image):
+def binary(image):
     image = cv2.adaptiveThreshold(image, maxValue=255,
                                   adaptiveMethod=cv2.ADAPTIVE_THRESH_GAUSSIAN_C,
                                   thresholdType=cv2.THRESH_BINARY_INV,
@@ -87,11 +87,12 @@ def watershed_segment(image):
 
 def blur_threshold(image):
     # Apply a blur to the image, to help remove noise
+    # TODO Try a median blur
     image = cv2.GaussianBlur(image, ksize=(0, 0), sigmaX=5)
     image_logging.info(image, f"preprocessing_blurred")
 
     # Use an adaptive threshold to convert the image to binary
-    image = clean_binary(image)
+    image = binary(image)
     image_logging.info(image, f"preprocessing_clean_binary")
 
     return image
