@@ -21,11 +21,11 @@ def batch_capture():
 
 def single_capture():
     rel_angle = 90
-    l1_angle = 30
-    l2_angle = 30
-    l1_distance = 35
-    l2_distance = 35
-    coin_rotation = 315
+    l1_angle = 35
+    l2_angle = 35
+    l1_distance = 28
+    l2_distance = 28
+    coin_rotation = 0
 
     # Save the image
     cv2.imwrite(
@@ -39,8 +39,10 @@ def single_capture():
         ), capture())
 
 
+
 def main():
-    single_capture()
+    # single_capture()
+    cv2.imwrite("data/mixed/1968.png", capture())
 
 
 if __name__ == '__main__':
