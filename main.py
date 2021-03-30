@@ -22,7 +22,7 @@ def main():
 
     # Load an image
     image = cv2.imread(
-        "data/mixed/1968.png",
+        "data/mixed/1967.png",
         cv2.IMREAD_GRAYSCALE
     )
     # image = capture.capture()

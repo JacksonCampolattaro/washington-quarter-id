@@ -4,6 +4,7 @@ import os
 import glob
 
 from quarterid import coin_read
+from quarterid.coin_regularization import rotate_image
 
 
 class TestDateRecognition(unittest.TestCase):
@@ -18,6 +19,8 @@ class TestDateRecognition(unittest.TestCase):
         for filename in glob.glob(os.path.join(path, "*.png")):
             # Load the image
             image = cv2.imread(filename, cv2.IMREAD_GRAYSCALE)
+
+            # image = rotate_image(image, -2)
 
             # Get the expected date from the path
             date = os.path.splitext(os.path.basename(filename))[0]
