@@ -36,4 +36,4 @@ class TestDateRecognition(unittest.TestCase):
 
                 self.assertEqual(known_date, date, "Incorrect date detected")
 
-                self.assertGreater(0.5, confidence, "Confidence too low")
+                self.assertGreater(confidence, 0.5, "Confidence too low")
