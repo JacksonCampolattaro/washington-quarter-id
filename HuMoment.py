@@ -1,7 +1,7 @@
 import cv2
 import math
 import numpy as np
-
+from PIL import Image
 #def huMoment(image, mode):
 #image = input image path
 #mode = 0 if date 1 if mint mark
@@ -9,7 +9,7 @@ image = 'Image/Dilation.png'
 mode = 0
 img = cv2.imread(image,0)
 img0 = cv2.imread('Image/0.jpg',0)
-img1 = cv2.imread('Image/1.jpg',0) #rect works better
+img1 = cv2.imread('Image/1.jpg',0)
 img2 = cv2.imread('Image/2.jpg',0)
 img3 = cv2.imread('Image/3.jpg',0)
 img4 = cv2.imread('Image/4.jpg',0)
@@ -23,7 +23,7 @@ diff = cv2.imread('Image/D.png',0)
 pint = cv2.imread('Image/P.png',0)
 #preprocess the templates
 ret, thresh = cv2.threshold(img, 127, 255,0)
-ret, thresh1 = cv2.threshold(rect, 127, 255,0)#      rect works much better than img1
+ret, thresh1 = cv2.threshold(img1, 127, 255,0)#      rect works much better than img1
 ret, thresh2 = cv2.threshold(img2, 127, 255,0)
 ret, thresh3 = cv2.threshold(img3, 127, 255,0)
 ret, thresh4 = cv2.threshold(img4, 127, 255,0)
@@ -177,7 +177,7 @@ if mode == 1:
         d = cv2.matchShapes(cnt0, cnte, 3, 0.0)
 
 
-#print(test)
+#confirm output
 z = [one,two,three,four,five,six,seven,eight,nine,zero,d,p]
 a = 0
 b = min(z)
@@ -186,6 +186,8 @@ y = 0
 while z[y] != b:
     y = y+1
 a = y+1
+if a == 10:
+    a = 0
 if a == 11:
     a = 'p'
 if a == 12:
@@ -194,3 +196,4 @@ print(z)
 print(a)
 print(c)
 #return a,c
+
