@@ -17,7 +17,7 @@ def isolate_date(coin_image):
     char_height = int(char_width * 1.40)
 
     # This determines the gap between the pixels and the bottom of the image
-    rim_thickness = int(side_length * 0.00)
+    rim_thickness = int(side_length * 0.015)
 
     # These are the bounds of the region we need to take
     char_start_x = int((side_length - char_width) / 2)

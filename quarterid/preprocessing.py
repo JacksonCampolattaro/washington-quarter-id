@@ -88,8 +88,8 @@ def watershed_segment(image):
 def blur_threshold(image):
     # Apply a blur to the image, to help remove noise
     # TODO Try a median blur
-    # image = cv2.GaussianBlur(image, ksize=(0, 0), sigmaX=5)
-    image = cv2.medianBlur(image, ksize=15)
+    image = cv2.GaussianBlur(image, ksize=(0, 0), sigmaX=5)
+    # image = cv2.medianBlur(image, ksize=15)
     image_logging.info(image, f"preprocessing_blurred")
 
     # Use an adaptive threshold to convert the image to binary
