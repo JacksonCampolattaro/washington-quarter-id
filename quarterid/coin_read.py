@@ -60,7 +60,15 @@ def isolate_mint_mark(coin_image):
 
 
 def read_character(character_image, allowlist, default):
-    return easy.read_character(character_image, allowlist, default)
+
+    # Attempt to use EasyOCR to read the character
+    character, confidence = easy.read_character(character_image, allowlist, default)
+
+    # If that didn't give good results, try using the hu moment method
+    if confidence < 0.3:
+        character, confidence = hu_moment.read_character(character_image, allowlist, default)
+
+    return character, confidence
 
 
 def read_date(coin_image):
