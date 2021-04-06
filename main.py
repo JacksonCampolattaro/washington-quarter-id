@@ -7,6 +7,7 @@ import cv2
 # from quarterid import capture
 from quarterid import image_logging
 from quarterid.coin_isolation import split_coins
+from quarterid.orientation import template_match
 from quarterid.coin_regularization import rotate_image, intensity_normalize_image
 from quarterid.coin_read import read_date, read_mint
 
@@ -36,10 +37,11 @@ def main():
         (x, y, r) = circle
 
         # TODO Find coin rotation
-        rotated_image = rotate_image(coin_image, -2)
-        image_logging.info(rotated_image, f"coin_{index}_({x},{y})")
-
-        logger.info(read_date(rotated_image))
+        template_match.find_angle(image)
+        # rotated_image = rotate_image(coin_image, -2)
+        # image_logging.info(rotated_image, f"coin_{index}_({x},{y})")
+        #
+        # logger.info(read_date(rotated_image))
         # print(read_mint(rotated_image))
 
     # Annotate the original image, for debugging
