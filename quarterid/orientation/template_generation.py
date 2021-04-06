@@ -8,6 +8,10 @@ import quarterid.coin_isolation
 from quarterid import coin_isolation, coin_regularization
 
 
+def similarity_to_template(image, template):
+    return cv2.matchTemplate(image, template, cv2.TM_CCOEFF).max()
+
+
 def without_rim(image, rim_fraction):
     w, h = image.shape
     r = int((w / 2) * (1.0 - rim_fraction))
@@ -31,7 +35,7 @@ def edges(image):
     # Find the combined magnitude of both edge directions
     combined_edges = cv2.magnitude(x_edges, y_edges)
 
-    return combined_edges
+    return np.uint8(255 * combined_edges / np.max(combined_edges))
 
 
 def main():
@@ -43,8 +47,7 @@ def main():
     edge_images = [edges(image) for image in images]
 
     # Combine edge images into an average
-    average_edge = np.sum(image for image in edge_images)
-    average_edge = np.uint8(255 * average_edge / np.max(average_edge))
+    average_edge = np.uint8(sum(image / len(edge_images) for image in edge_images))
 
     # cv2.imshow("test", average_edge)
     # cv2.waitKey()
@@ -54,12 +57,11 @@ def main():
     template_image = without_rim(average_edge, rim_thickness)
     template_image = center_crop(template_image, rim_thickness)
 
-    cv2.imshow("test", template_image)
-    cv2.waitKey()
+    # cv2.imshow("test", template_image)
+    # cv2.waitKey()
 
     # Save the average
-
-    print("main")
+    cv2.imwrite("templates/edges.png", template_image)
 
 
 if __name__ == '__main__':
