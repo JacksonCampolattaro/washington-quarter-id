@@ -27,7 +27,7 @@ def read_character(character_image, allowlist, default):
     character_image = preprocessing.cover_margins(character_image, int(character_image.shape[0] / 9))
 
     # Dilate the image TODO Maybe?
-    character_image = cv2.dilate(character_image, np.ones((3, 3), np.uint8), 1)
+    # character_image = cv2.dilate(character_image, np.ones((3, 3), np.uint8), 1)
 
     # Eliminate all but the largest contour from the binary image
     character_image = preprocessing.largest_contour_only(character_image)

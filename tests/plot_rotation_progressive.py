@@ -41,7 +41,7 @@ def main():
     fig.suptitle("Progressive Coin-reading confidence as a function of image rotation (1967)")
 
     # Perform a search across the entire range
-    angles = np.linspace(-180, 180, 40)
+    angles = np.linspace(-180, 180, 80)
     predictions, confidences = zip(*try_range(image, angles))
     colors = ["green" if prediction == correct_date else "lightblue" for prediction in predictions]
 
@@ -52,7 +52,7 @@ def main():
     best_angle = angles[confidences.index(max(confidences))]
 
     # Repeat for a range centered around the best angle
-    angles = np.linspace(best_angle - 20, best_angle + 20, 40)
+    angles = np.linspace(best_angle - 20, best_angle + 20, 80)
     predictions, confidences = zip(*try_range(image, angles))
     colors = ["green" if prediction == correct_date else "lightblue" for prediction in predictions]
 
@@ -63,7 +63,7 @@ def main():
     best_angle = angles[confidences.index(max(confidences))]
 
     # Repeat for a range centered around the best angle
-    angles = np.linspace(best_angle - 3, best_angle + 3, 40)
+    angles = np.linspace(best_angle - 3, best_angle + 3, 80)
     predictions, confidences = zip(*try_range(image, angles))
     colors = ["green" if prediction == correct_date else "lightblue" for prediction in predictions]
 

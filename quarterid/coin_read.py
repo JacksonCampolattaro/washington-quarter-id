@@ -17,7 +17,7 @@ def isolate_date(coin_image):
     char_height = int(char_width * 1.40)
 
     # This determines the gap between the pixels and the bottom of the image
-    rim_thickness = int(side_length * 0.015)
+    rim_thickness = int(side_length * 0.000)
 
     # These are the bounds of the region we need to take
     char_start_x = int((side_length - char_width) / 2)
@@ -65,8 +65,8 @@ def read_character(character_image, allowlist, default):
     character, confidence = easy.read_character(character_image, allowlist, default)
 
     # If that didn't give good results, try using the hu moment method
-    if confidence < 0.3:
-        character, confidence = hu_moment.read_character(character_image, allowlist, default)
+    # if confidence < 0.1:
+    #     character, confidence = hu_moment.read_character(character_image, allowlist, default)
 
     return character, confidence
 
