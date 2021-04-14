@@ -9,7 +9,7 @@ from quarterid.orientation import template_match
 
 def main():
     # Load an image
-    image_path = "data/dates/1967.png"
+    image_path = "data/dates/1984.png"
     image = cv2.imread(
         image_path,
         cv2.IMREAD_GRAYSCALE
@@ -28,7 +28,7 @@ def main():
     # Create a plot
     plt.style.use('dark_background')
     axis = plt.subplot(projection='polar')
-    axis.set_title("Template similarity as a function of image rotation (1967)")
+    axis.set_title("Template similarity as a function of image rotation (1984)")
     axis.set_theta_zero_location("S")
     axis.set_rmax(1.0)
 

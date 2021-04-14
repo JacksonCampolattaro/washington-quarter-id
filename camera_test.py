@@ -42,7 +42,7 @@ def single_capture():
 
 def main():
     # single_capture()
-    cv2.imwrite("data/mixed/1968.png", capture())
+    cv2.imwrite("data/rotated/315,1967.png", capture())
 
 
 if __name__ == '__main__':
