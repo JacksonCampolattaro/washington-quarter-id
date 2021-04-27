@@ -11,6 +11,8 @@ from quarterid.orientation import template_match
 from quarterid.coin_regularization import rotate_image, intensity_normalize_image
 from quarterid.coin_read import read_date, read_mint
 
+from quarterid.capture import capture
+
 logger = logging.getLogger(__name__)
 
 
@@ -23,26 +25,27 @@ def main():
 
     # Load an image
     image = cv2.imread(
-        "data/mixed/1967.png",
+        "data/rotated/180,1967.png",
         cv2.IMREAD_GRAYSCALE
     )
-    # image = capture.capture()
+    # image = capture()
     logger.info(f"Loaded image of size {image.shape[0]}x{image.shape[1]}")
 
     # Search for circular elements in the image
-    coins_found = split_coins(image=image, pix_radius=735)
+    coins_found = split_coins(image=image, pix_radius=730)
 
     # Iterate over all the coins that were found
     for index, (coin_image, circle) in enumerate(coins_found):
         (x, y, r) = circle
 
-        # TODO Find coin rotation
-        template_match.find_angle(image)
-        # rotated_image = rotate_image(coin_image, -2)
-        # image_logging.info(rotated_image, f"coin_{index}_({x},{y})")
-        #
-        # logger.info(read_date(rotated_image))
-        # print(read_mint(rotated_image))
+        image_logging.info(coin_image, f"coin_{index}_({x},{y})")
+
+        # TODO Find coin rotation, and correct it
+        angle = template_match.find_angle(image)
+        rotated_image = rotate_image(coin_image, angle)
+        image_logging.info(rotated_image, f"coin_{index}_rotated_({x},{y})")
+
+        logger.info(read_date(rotated_image))
 
     # Annotate the original image, for debugging
     for _, (x, y, r) in coins_found:

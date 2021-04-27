@@ -13,11 +13,11 @@ def isolate_date(coin_image):
     side_length = coin_image.shape[0]
 
     # These determine the pixel size of the digits
-    char_width = int(side_length / 10)
-    char_height = int(char_width * 1.40)
+    char_width = int(side_length / 11)
+    char_height = int(char_width * 1.20)
 
     # This determines the gap between the pixels and the bottom of the image
-    rim_thickness = int(side_length * 0.000)
+    rim_thickness = int(side_length * 0.005)
 
     # These are the bounds of the region we need to take
     char_start_x = int((side_length - char_width) / 2)
@@ -27,7 +27,7 @@ def isolate_date(coin_image):
     char_box = (char_start_x, char_start_y, char_end_x, char_end_y)
 
     # Start by rotating the image to center the first digit
-    rotated_image = coin_regularization.rotate_image(coin_image, 25)
+    rotated_image = coin_regularization.rotate_image(coin_image, 22)
 
     # We can *probably* trust that our dates will have 4 digits
     digits = []

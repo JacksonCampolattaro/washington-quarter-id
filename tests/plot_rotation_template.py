@@ -9,13 +9,13 @@ from quarterid.orientation import template_match
 
 def main():
     # Load an image
-    image_path = "data/dates/1984.png"
+    image_path = "data/dates/1967.png"
     image = cv2.imread(
         image_path,
         cv2.IMREAD_GRAYSCALE
     )
     assert image is not None
-    # image = coin_regularization.rotate_image(image, 120)
+    image = coin_regularization.rotate_image(image, 180)
 
     # File to load our template from
     template_path = "../quarterid/orientation/templates/edges.png"
@@ -28,7 +28,7 @@ def main():
     # Create a plot
     plt.style.use('dark_background')
     axis = plt.subplot(projection='polar')
-    axis.set_title("Template similarity as a function of image rotation (1984)")
+    axis.set_title("Template similarity as a function of image rotation (1967)")
     axis.set_theta_zero_location("S")
     axis.set_rmax(1.0)
 

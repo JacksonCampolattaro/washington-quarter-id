@@ -2,10 +2,13 @@ import os
 
 import cv2
 import numpy as np
+import logging
 
 import quarterid.coin_regularization
 from quarterid import coin_isolation
 from quarterid.coin_regularization import rotate_image
+
+logger = logging.getLogger(__name__)
 
 
 def similarity_to_template(image, template):
@@ -47,6 +50,6 @@ def find_angle(image):
 
     # Find the angle of highest similarity
     best_angle = max(similarities, key=similarities.get)
-    print(best_angle)
+    logger.debug(f"Coin angle determined: {best_angle}deg")
 
     return best_angle
